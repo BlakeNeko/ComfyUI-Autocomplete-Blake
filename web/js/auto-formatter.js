@@ -153,6 +153,12 @@ export function formatTextareaOnBlur(textarea) {
         // Try to preserve cursor position
         const newCursorPos = Math.min(cursorPos, formattedText.length);
         textarea.setSelectionRange(newCursorPos, newCursorPos);
+
+        // ComfyUI syncs the textarea into its widget model (and, in newer frontends,
+        // into the widget value store) only on the 'input' event. Updating
+        // textarea.value alone leaves the old value in the model, so the formatted
+        // text is lost when the workflow is reloaded (e.g. switching workflow tabs).
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
     }
 }
 

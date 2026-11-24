@@ -1,5 +1,6 @@
 import {
     formatPromptText,
+    formatTextareaOnBlur,
     __test__
 } from "../../web/js/auto-formatter.js";
 import { settingValues } from "../../web/js/settings.js";
@@ -266,6 +267,88 @@ describe('AutoFormatter Functions', () => {
 
         test('should handle input with only spaces', () => {
             expect(formatPromptText('   ')).toBe('   ');
+        });
+    });
+
+    describe('formatTextareaOnBlur', () => {
+        const originalUseTrailingComma = settingValues.useTrailingComma;
+        const originalTrimSurroundingSpaces = settingValues.trimSurroundingSpaces;
+
+        afterEach(() => {
+            settingValues.useTrailingComma = originalUseTrailingComma;
+            settingValues.trimSurroundingSpaces = originalTrimSurroundingSpaces;
+        });
+
+        // The jest environment for this project is node (test.config.js is not
+        // picked up), so build a minimal EventTarget-based textarea stand-in.
+        function createFakeTextarea(value) {
+            const textarea = new EventTarget();
+            textarea.value = value;
+            textarea.selectionStart = 0;
+            textarea.selectionEnd = 0;
+            textarea.setSelectionRange = function (start, end) {
+                this.selectionStart = start;
+                this.selectionEnd = end;
+            };
+            return textarea;
+        }
+
+        test('formats the value and dispatches one bubbling input event', () => {
+            const textarea = createFakeTextarea('tag1,tag2');
+
+            const events = [];
+            textarea.addEventListener('input', (event) => events.push(event));
+
+            formatTextareaOnBlur(textarea);
+
+            expect(textarea.value).toBe('tag1, tag2');
+            expect(events).toHaveLength(1);
+            expect(events[0].type).toBe('input');
+            expect(events[0].bubbles).toBe(true);
+        });
+
+        test('does not dispatch an input event when the value is already formatted', () => {
+            const textarea = createFakeTextarea('tag1, tag2');
+
+            let eventCount = 0;
+            textarea.addEventListener('input', () => eventCount++);
+
+            formatTextareaOnBlur(textarea);
+
+            expect(textarea.value).toBe('tag1, tag2');
+            expect(eventCount).toBe(0);
+        });
+
+        test('preserves the cursor position after formatting', () => {
+            const textarea = createFakeTextarea('tag1,tag2');
+            textarea.setSelectionRange(5, 5);
+
+            formatTextareaOnBlur(textarea);
+
+            expect(textarea.value).toBe('tag1, tag2');
+            expect(textarea.selectionStart).toBe(5);
+            expect(textarea.selectionEnd).toBe(5);
+        });
+
+        test('clamps the cursor position to the formatted length', () => {
+            const textarea = createFakeTextarea('tag1,  tag2');
+            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+
+            formatTextareaOnBlur(textarea);
+
+            expect(textarea.value).toBe('tag1, tag2');
+            expect(textarea.selectionStart).toBe(textarea.value.length);
+        });
+
+        test('does not emit an input event when formatting changes nothing', () => {
+            const textarea = createFakeTextarea('');
+
+            let eventCount = 0;
+            textarea.addEventListener('input', () => eventCount++);
+
+            formatTextareaOnBlur(textarea);
+
+            expect(eventCount).toBe(0);
         });
     });
 });
