@@ -19,3 +19,6 @@ data/.download
 
 # csv meta information
 csv_meta.json
+
+# AI working directory (docs/files for AI assistance)
+.ai/
