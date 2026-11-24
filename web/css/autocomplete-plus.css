@@ -1,42 +1,54 @@
-/* Light Theme */
- body {
-  --autocomplete-plus-text-color-cat-blue: var(--p-blue-700);
-  --autocomplete-plus-text-color-cat-red: var(--p-red-600);
-  --autocomplete-plus-text-color-cat-purple: var(--p-purple-600);
-  --autocomplete-plus-text-color-cat-green: var(--p-green-700);
-  --autocomplete-plus-text-color-cat-yellow: var(--p-yellow-600);
-  --autocomplete-plus-text-color-cat-gray: var(--p-gray-600);
-  --autocomplete-plus-text-color-cat-sky: var(--p-sky-600);
-  --autocomplete-plus-text-color-cat-orange: var(--p-orange-600);
-  --autocomplete-plus-text-color-cat-white: var(--p-neutral-700);
-  --autocomplete-plus-text-color-disabled: var(--p-gray-400);
-  --autocomplete-plus-list-color-even: var(--p-neutral-300);
-  --autocomplete-plus-list-color-odd: var(--p-neutral-400);
+/*
+ * Tag category colors follow Danbooru's semantic tag palette.
+ * Light theme: 40% HSLUV lightness level; dark theme: 70.5% level
+ * (yellow hues use 84% in dark theme). e621 reuses the same semantic colors.
+ */
+
+/* Fallback for browsers without light-dark(): light theme values */
+:root {
+  --autocomplete-plus-tag-color-general: #005ac3;
+  --autocomplete-plus-tag-color-artist: #c00004;
+  --autocomplete-plus-tag-color-copyright: #a800aa;
+  --autocomplete-plus-tag-color-character: #006e19;
+  --autocomplete-plus-tag-color-meta: #8d4f00;
+  --autocomplete-plus-tag-color-species: #006496;
+  --autocomplete-plus-tag-color-lore: #705d00;
+  --autocomplete-plus-tag-color-unknown: #5b5c79;
+  --autocomplete-plus-tag-color-disabled: #9192a7;
+  --autocomplete-plus-list-color-even: var(--tr-even-bg-color, var(--comfy-menu-bg));
+  --autocomplete-plus-list-color-odd: var(--tr-odd-bg-color, var(--comfy-menu-secondary-bg));
+  --autocomplete-plus-list-color-selected: var(--interface-panel-selected-surface, var(--border-color));
+  --autocomplete-plus-list-color-hover: var(--interface-panel-hover-surface, var(--content-hover-bg, var(--border-color)));
   --wiki-icon-text-color: var(--input-text);
   --wiki-icon-opacity-normal: 0.7;
-  --wiki-icon-opacity-hover: 1.0;
+  --wiki-icon-opacity-hover: 1;
   --wiki-icon-opacity-disabled: 0;
 }
 
-/* Dark Theme */
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    --autocomplete-plus-tag-color-general: light-dark(#005ac3, #8caaff);
+    --autocomplete-plus-tag-color-artist: light-dark(#c00004, #ff8a8b);
+    --autocomplete-plus-tag-color-copyright: light-dark(#a800aa, #c797ff);
+    --autocomplete-plus-tag-color-character: light-dark(#006e19, #35c64a);
+    --autocomplete-plus-tag-color-meta: light-dark(#8d4f00, #ffc5a5);
+    --autocomplete-plus-tag-color-species: light-dark(#006496, #4bb4ff);
+    --autocomplete-plus-tag-color-lore: light-dark(#705d00, #ead084);
+    --autocomplete-plus-tag-color-unknown: light-dark(#5b5c79, #ababbc);
+  }
+}
+
+/* Older frontends have no color-scheme and rely on the .dark-theme class. */
 body.dark-theme,
 :root.dark-theme body {
-  --autocomplete-plus-text-color-cat-blue: var(--p-blue-400);
-  --autocomplete-plus-text-color-cat-red: var(--p-red-400);
-  --autocomplete-plus-text-color-cat-purple: var(--p-purple-400);
-  --autocomplete-plus-text-color-cat-green: var(--p-green-400);
-  --autocomplete-plus-text-color-cat-yellow: var(--p-yellow-400);
-  --autocomplete-plus-text-color-cat-gray: var(--p-gray-400);
-  --autocomplete-plus-text-color-cat-sky: var(--p-sky-300);
-  --autocomplete-plus-text-color-cat-orange: var(--p-orange-400);
-  --autocomplete-plus-text-color-cat-white: var(--p-neutral-200);
-  --autocomplete-plus-text-color-disabled: var(--p-gray-500);
-  --autocomplete-plus-list-color-even: var(--p-neutral-800);
-  --autocomplete-plus-list-color-odd: var(--p-neutral-900);
-  --wiki-icon-text-color: var(--input-text);
-  --wiki-icon-opacity-normal: 0.5;
-  --wiki-icon-opacity-hover: 0.9;
-  --wiki-icon-opacity-disabled: 0;
+  --autocomplete-plus-tag-color-general: #8caaff;
+  --autocomplete-plus-tag-color-artist: #ff8a8b;
+  --autocomplete-plus-tag-color-copyright: #c797ff;
+  --autocomplete-plus-tag-color-character: #35c64a;
+  --autocomplete-plus-tag-color-meta: #ffc5a5;
+  --autocomplete-plus-tag-color-species: #4bb4ff;
+  --autocomplete-plus-tag-color-lore: #ead084;
+  --autocomplete-plus-tag-color-unknown: #ababbc;
 }
 
 #autocomplete-plus-root {
@@ -50,60 +62,38 @@ body.dark-theme,
   color: var(--input-text);
 }
 
-#autocomplete-plus-root .danbooru[data-tag-category="general"] {
-  color: var(--autocomplete-plus-text-color-cat-blue);
+#autocomplete-plus-root [data-tag-category="general"] {
+  color: var(--autocomplete-plus-tag-color-general);
 }
 
-#autocomplete-plus-root .danbooru[data-tag-category="artist"] {
-  color: var(--autocomplete-plus-text-color-cat-red);
+#autocomplete-plus-root [data-tag-category="artist"] {
+  color: var(--autocomplete-plus-tag-color-artist);
 }
 
-#autocomplete-plus-root .danbooru[data-tag-category="copyright"] {
-  color: var(--autocomplete-plus-text-color-cat-purple);
+#autocomplete-plus-root [data-tag-category="copyright"] {
+  color: var(--autocomplete-plus-tag-color-copyright);
 }
 
-#autocomplete-plus-root .danbooru[data-tag-category="character"] {
-  color: var(--autocomplete-plus-text-color-cat-green);
+#autocomplete-plus-root [data-tag-category="character"] {
+  color: var(--autocomplete-plus-tag-color-character);
 }
 
-#autocomplete-plus-root .danbooru[data-tag-category="meta"] {
-  color: var(--autocomplete-plus-text-color-cat-yellow);
+#autocomplete-plus-root [data-tag-category="meta"] {
+  color: var(--autocomplete-plus-tag-color-meta);
 }
 
-#autocomplete-plus-root .danbooru[data-tag-category="unknown"] {
-  color: var(--autocomplete-plus-text-color-cat-gray);
+#autocomplete-plus-root [data-tag-category="species"] {
+  color: var(--autocomplete-plus-tag-color-species);
 }
 
-#autocomplete-plus-root .e621[data-tag-category="general"] {
-  color: var(--autocomplete-plus-text-color-cat-sky);
+#autocomplete-plus-root [data-tag-category="lore"] {
+  color: var(--autocomplete-plus-tag-color-lore);
 }
 
-#autocomplete-plus-root .e621[data-tag-category="artist"] {
-  color: var(--autocomplete-plus-text-color-cat-orange);
-}
-
-#autocomplete-plus-root .e621[data-tag-category="copyright"] {
-  color: var(--autocomplete-plus-text-color-cat-purple);
-}
-
-#autocomplete-plus-root .e621[data-tag-category="character"] {
-  color: var(--autocomplete-plus-text-color-cat-green);
-}
-
-#autocomplete-plus-root .e621[data-tag-category="species"] {
-  color: var(--autocomplete-plus-text-color-cat-red);
-}
-
-#autocomplete-plus-root .e621[data-tag-category="meta"] {
-  color: var(--autocomplete-plus-text-color-cat-white);
-}
-
-#autocomplete-plus-root .e621[data-tag-category="lore"] {
-  color: var(--autocomplete-plus-text-color-cat-red);
-}
-
-#autocomplete-plus-root .e621[data-tag-category="unknown"] {
-  color: var(--autocomplete-plus-text-color-cat-purple);
+#autocomplete-plus-root [data-tag-category="unknown"],
+#autocomplete-plus-root [data-tag-category="unused"],
+#autocomplete-plus-root [data-tag-category="invalid"] {
+  color: var(--autocomplete-plus-tag-color-unknown);
 }
 
 #autocomplete-plus-list {
@@ -141,11 +131,11 @@ body.dark-theme,
 }
 
 .autocomplete-plus-item.selected {
-  background-color: var(--border-color);
+  background-color: var(--autocomplete-plus-list-color-selected);
 }
 
 .autocomplete-plus-item:hover {
-  background-color: var(--comfy-hover-bg);
+  background-color: var(--autocomplete-plus-list-color-hover);
 }
 
 .autocomplete-plus-item .autocomplete-plus-tag-name {
@@ -159,7 +149,7 @@ body.dark-theme,
 }
 
 .autocomplete-plus-tag-name.autocomplete-plus-already-exists  {
-  color: var(--autocomplete-plus-text-color-disabled);
+  color: var(--autocomplete-plus-tag-color-disabled);
 }
 
 .autocomplete-plus-item .autocomplete-plus-alias {
@@ -207,60 +197,38 @@ body.dark-theme,
   color: var(--input-text);
 }
 
-#related-tags-root .danbooru[data-tag-category="general"] {
-  color: var(--autocomplete-plus-text-color-cat-blue);
+#related-tags-root [data-tag-category="general"] {
+  color: var(--autocomplete-plus-tag-color-general);
 }
 
-#related-tags-root .danbooru[data-tag-category="artist"] {
-  color: var(--autocomplete-plus-text-color-cat-red);
+#related-tags-root [data-tag-category="artist"] {
+  color: var(--autocomplete-plus-tag-color-artist);
 }
 
-#related-tags-root .danbooru[data-tag-category="copyright"] {
-  color: var(--autocomplete-plus-text-color-cat-purple);
+#related-tags-root [data-tag-category="copyright"] {
+  color: var(--autocomplete-plus-tag-color-copyright);
 }
 
-#related-tags-root .danbooru[data-tag-category="character"] {
-  color: var(--autocomplete-plus-text-color-cat-green);
+#related-tags-root [data-tag-category="character"] {
+  color: var(--autocomplete-plus-tag-color-character);
 }
 
-#related-tags-root .danbooru[data-tag-category="meta"] {
-  color: var(--autocomplete-plus-text-color-cat-yellow);
+#related-tags-root [data-tag-category="meta"] {
+  color: var(--autocomplete-plus-tag-color-meta);
 }
 
-#related-tags-root .danbooru[data-tag-category="unknown"] {
-  color: var(--autocomplete-plus-text-color-cat-gray);
+#related-tags-root [data-tag-category="species"] {
+  color: var(--autocomplete-plus-tag-color-species);
 }
 
-#related-tags-root .e621[data-tag-category="general"] {
-  color: var(--autocomplete-plus-text-color-cat-sky);
+#related-tags-root [data-tag-category="lore"] {
+  color: var(--autocomplete-plus-tag-color-lore);
 }
 
-#related-tags-root .e621[data-tag-category="artist"] {
-  color: var(--autocomplete-plus-text-color-cat-orange);
-}
-
-#related-tags-root .e621[data-tag-category="copyright"] {
-  color: var(--autocomplete-plus-text-color-cat-purple);
-}
-
-#related-tags-root .e621[data-tag-category="character"] {
-  color: var(--autocomplete-plus-text-color-cat-green);
-}
-
-#related-tags-root .e621[data-tag-category="species"] {
-  color: var(--autocomplete-plus-text-color-cat-red);
-}
-
-#related-tags-root .e621[data-tag-category="meta"] {
-  color: var(--autocomplete-plus-text-color-cat-white);
-}
-
-#related-tags-root .e621[data-tag-category="lore"] {
-  color: var(--autocomplete-plus-text-color-cat-red);
-}
-
-#related-tags-root .e621[data-tag-category="unknown"] {
-  color: var(--autocomplete-plus-text-color-cat-gray);
+#related-tags-root [data-tag-category="unknown"],
+#related-tags-root [data-tag-category="unused"],
+#related-tags-root [data-tag-category="invalid"] {
+  color: var(--autocomplete-plus-tag-color-unknown);
 }
 
 #related-tags-header {
@@ -368,11 +336,11 @@ body.dark-theme,
 }
 
 .related-tag-item:hover {
-  background-color: var(--p-form-field-filled-hover-background);
+  background-color: var(--autocomplete-plus-list-color-hover);
 }
 
 .related-tag-item.selected {
-  background-color: var(--border-color);
+  background-color: var(--autocomplete-plus-list-color-selected);
 }
 
 .related-tag-item .related-tag-name {
@@ -380,7 +348,7 @@ body.dark-theme,
 }
 
 .related-tag-item .related-tag-name.related-tag-already-exists  {
-  color: var(--autocomplete-plus-text-color-disabled);
+  color: var(--autocomplete-plus-tag-color-disabled);
 }
 
 .related-tag-item .related-tag-alias {
